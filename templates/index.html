@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rant Room AI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f7f7f7;
+        }
+
+        textarea {
+            width: 100%;
+            max-width: 500px;
+            height: 120px;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            resize: vertical;
+        }
+
+        select, button {
+            margin-top: 10px;
+            font-size: 15px;
+            padding: 10px 15px;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #04AF50;
+            color: white;
+            border: none;
+            margin-left: 10px;
+        }
+
+        #reply {
+            margin-top: 20px;
+            font-size: 18px;
+            padding: 15px;
+            max-width: 500px;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 0 10px #ccc;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rant Room AI by MOHAMMAD ARSHAD {BIJNOR}</h1>
+    <h2>"Know how your people react when they listen this..."</h2>
+
+    <textarea id="rant" placeholder="Type your rant here..."></textarea><br>
+
+    <select id="tone">
+        <option value="best_friend">Best Friend</option>
+        <option value="savage">Savage</option>
+        <option value="zen_monk">Zen Monk</option>
+        <option value="therapist">Therapist</option>
+    </select>
+
+    <button onclick="sendRant()">Send Rant</button>
+
+    <h3>AI Reply:</h3>
+    <div id="reply"></div>
+
+    <script>
+        async function sendRant() {
+            const rant = document.getElementById('rant').value.trim();
+            const tone = document.getElementById('tone').value;
+
+            if (!rant) {
+                alert('Please type your rant before sending!');
+                return;
+            }
+
+            document.getElementById('reply').innerText = 'Thinking...';
+
+            try {
+                const response = await fetch("http://rant-backend.onrender.com/rant"
+                    , {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ rant, tone })
+                });
+
+                const data = await response.json();
+                document.getElementById('reply').innerText = data.reply;
+            } catch (error) {
+                document.getElementById('reply').innerText = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
